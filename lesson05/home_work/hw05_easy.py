@@ -11,26 +11,37 @@ import shutil
 
 
 # Решение задачи-1
-def make_dirs_19():
+def make_dir(dir_name):
+    """
+    Функция создает новую директорию в текущей директории.
+    :param dir_name: имя директории
+    :return: результат операции
+    """
+    try:
+        os.mkdir(dir_name, stat.S_IWUSR)
+        return f"Директория {dir_name} успешно создана."
+    except FileExistsError:
+        return f"Невозможно создать директорию {dir_name}. Директория уже существует."
+
+
+def remove_dir(dir_name):
+    """
+    Функция удаляет директорию из текущей директории.
+    :param dir_name: имя директории
+    :return: результат операции
+    """
+    try:
+        os.rmdir(dir_name)
+        return f"Директория {dir_name} успешно удалена."
+    except OSError:
+        return f"Невозможно удалить директорию {dir_name}."
+
+
+if __name__ == "__main__":
     for i in range(1, 10):
-        try:
-            os.mkdir("dir_{}".format(i), stat.S_IWUSR)
-            print("Директория dir_{} создана.".format(i))
-        except FileExistsError:
-            print("Директория dir_{} уже существует.".format(i))
-
-
-def remove_dirs_19():
+        print(make_dir(f"dir_{i}"))
     for i in range(1, 10):
-        try:
-            os.rmdir("dir_{}".format(i))
-            print("Директория dir_{} удалена.".format(i))
-        except OSError:
-            print("Директория dir_{} содержит файлы. Перед удалением очистите директорию.".format(i))
-
-
-make_dirs_19()
-remove_dirs_19()
+        print(remove_dir(f"dir_{i}"))
 
 
 # Задача-2:
@@ -38,7 +49,16 @@ remove_dirs_19()
 
 
 # Решение задачи-2
-print(list(filter(os.path.isdir, os.listdir())))
+def show_dirs():
+    """
+    Функция возвращает список директорий, находящихся в текущей директории
+    :return: список директорий
+    """
+    return list(filter(os.path.isdir, os.listdir()))
+
+
+if __name__ == "__main__":
+    print(show_dirs())
 
 
 # Задача-3:
@@ -46,14 +66,19 @@ print(list(filter(os.path.isdir, os.listdir())))
 
 
 # Решение задачи-3, вариант-1 (с использованием shutil)
-shutil.copy(sys.argv[0], "{}_".format(sys.argv[0]))
+if __name__ == "__main__":
+    shutil.copy(sys.argv[0], "{}_".format(sys.argv[0]))
 
 
 # Решение задачи-3, вариант-2 (копирование содержимого)
 def copy_this_file():
+    """
+    Функция выполняет копирование данного файла.
+    """
     with open(sys.argv[0], "r", encoding="UTF-8") as src:
         with open("{}__".format(sys.argv[0]), "w", encoding="UTF-8") as dst:
             dst.write(src.read())
 
 
-copy_this_file()
+if __name__ == "__main__":
+    copy_this_file()
